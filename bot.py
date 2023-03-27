@@ -3,7 +3,7 @@ from discord import *
 import youtube_dl
 import asyncio
 
-token = "your token here"
+token = "token"
 intents = discord.Intents.all()
 client = discord.Client(intents=intents)
 
@@ -17,22 +17,37 @@ ffmpeg_options = {'options': '-vn'}
 async def on_ready():
     print(f"Bot logged in as {client.user}")
 
-#
+queue = []
 @client.event
 async def on_message(msg):
     if msg.content.startswith("!play"):
+        global queue
         try:
             voice_client = await msg.author.voice.channel.connect()
-            voice_clients[voice_client.guild.id] = voice_client
+            voice_clients[msg.guild.id] = voice_client
         except Exception as err:
             print(err)
+        search_query = " ".join(msg.content.split()[1:]) # возвращает список слов и собирает их в string например !play кто пчелок уважает msg.content.split вернет ["кто","пчелок","уважает"] а вместе .join это соберется в строку "кто пчелок уважает".
         try:
-            url = msg.content.split()[1]
             loop = asyncio.get_event_loop()
-            data = await loop.run_in_executor(None,lambda: ytdl.extract_info(url, download=False))
-            song = data['url']
-            player = discord.FFmpegPCMAudio(song, **ffmpeg_options)
-            voice_clients[msg.guild.id].play(player)
+            while voice_clients[msg.guild.id].is_playing():
+                await asyncio.sleep(1)
+            data = await loop.run_in_executor(None, lambda: ytdl.extract_info(f"ytsearch:{search_query}", download=False))
+            song = data['entries'][0]['url']
+            queue.append(song)
+            if len(queue) == 1 and not voice_clients[msg.guild.id].is_playing():
+                player = discord.FFmpegPCMAudio(queue[0], **ffmpeg_options)
+                voice_clients[msg.guild.id].play(player, after=lambda x: queue.pop(0))
+                await msg.channel.send(f"Играет {data['entries'][0]['title']}")
+            else:
+                await msg.channel.send(f"Добавлено в очередь: {data['entries'][0]['title']} to the queue")
+        except Exception as err:
+            print(err)
+    if msg.content.startswith("!skip"):
+        try:
+            if voice_clients[msg.guild.id].is_playing():
+                voice_clients[msg.guild.id].stop()
+                await msg.channel.send("Песня пропущена")
         except Exception as err:
             print(err)
     #pause
