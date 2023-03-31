@@ -23,6 +23,7 @@ asyncio
 Затем перейти в  Bot 
 
 ![image](https://user-images.githubusercontent.com/90842082/229178222-9d2662fa-e7c2-44fc-aa97-96b3e073847e.png)
+
 Затем необходимо получить токен
 
 ![image](https://user-images.githubusercontent.com/90842082/229178276-2f3afceb-82fd-4d65-8da7-d8707bd1146e.png)
@@ -34,6 +35,7 @@ asyncio
 Чтобы добавить бота на сервер, необходимо перейти OAuth2 –> URL Generator.
 
 ![image](https://user-images.githubusercontent.com/90842082/229178396-777f5f4d-07dd-4069-917e-60acb22d8a39.png)
+
 Затем выбрать:
 
 ![image](https://user-images.githubusercontent.com/90842082/229178449-c1cb24ad-6b91-4801-bfc6-427c1cd41c62.png)
@@ -51,7 +53,9 @@ pip install asyncio
 И необходимо добавить FFMPEG в PATH, сделать это можно в свойствах системы, по кнопке переменные среды.
 
 ![image](https://user-images.githubusercontent.com/90842082/229179582-53155b48-0e5e-44cd-b189-6cd69a1f9f4c.png)
+
 Затем добавить 3 exe файла, которые находятся в папке bin
 
 ![image](https://user-images.githubusercontent.com/90842082/229179665-3ae08eda-a8b9-4d88-8757-9892205fbd43.png)
+
 Добавить их нужно в PATH кликнув по кнопке изменить, а затем указать путь к папке с 3-мя exe
